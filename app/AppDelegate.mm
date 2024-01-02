@@ -1,20 +1,12 @@
 #import "AppDelegate.h"
-#import "util/log_util.h"
 
 @implementation AppDelegate
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        CGSize size = CGSizeMake(160, 100);
-        CGFloat padding = 20;
-        CGFloat innerPadding = 15;
-        CGFloat titleTextPadding = 15;
-
-        windowController = [[WindowController alloc] initWithSize:size
-                                                          padding:padding
-                                                     innerPadding:innerPadding
-                                                 titleTextPadding:titleTextPadding];
+        NSRect rect = NSMakeRect(0, 0, 600, 500);
+        windowController = [[WindowController alloc] initWithRect:rect];
     }
     return self;
 }

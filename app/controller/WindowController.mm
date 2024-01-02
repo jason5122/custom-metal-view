@@ -2,20 +2,12 @@
 
 @implementation WindowController
 
-- (instancetype)initWithSize:(CGSize)theSize
-                     padding:(CGFloat)thePadding
-                innerPadding:(CGFloat)theInnerPadding
-            titleTextPadding:(CGFloat)theTitleTextPadding {
+- (instancetype)initWithRect:(NSRect)rect {
     self = [super init];
     if (self) {
-        size = theSize;
-        padding = thePadding;
-        innerPadding = theInnerPadding;
-        titleTextPadding = theTitleTextPadding;
-
         unsigned int mask = NSWindowStyleMaskTitled | NSWindowStyleMaskResizable |
                             NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
-        self.window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 600, 500)
+        self.window = [[NSWindow alloc] initWithContentRect:rect
                                                   styleMask:mask
                                                     backing:NSBackingStoreBuffered
                                                       defer:false];
