@@ -1,15 +1,4 @@
-# Switcher
-
-A lightweight, simple window switcher inspired by [HyperSwitch](https://bahoom.com/hyperswitch).
-
-> [!NOTE]\
-> The name, app icon, and menu icon are all placeholders!
-
-https://github.com/jasonhan-vassar/switcher/assets/34594853/218a5335-62c4-4331-ab30-c822114a16cd
-
-## Requirements
-
-macOS 12.3+
+# MetalApp
 
 ## Building
 
@@ -47,12 +36,12 @@ gn gen out
 ninja -C out
 ```
 
-This generates `Switcher.app` in the `out/` directory.
+This generates `MetalApp.app` in the `out/` directory.
 
 ## Viewing logs
 
 ```
-log stream --predicate 'subsystem contains "com.jason5122.switcher"' --style compact
+log stream --predicate 'subsystem contains "com.jason5122.metal-app"' --style compact
 ```
 
 You can also use `Console.app`, but I prefer viewing them in the terminal so I use this command.

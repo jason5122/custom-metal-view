@@ -6,22 +6,6 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        NSDictionary* options = @{(__bridge NSString*)kAXTrustedCheckOptionPrompt : @false};
-        bool accessibilityGranted =
-            AXIsProcessTrustedWithOptions((__bridge CFDictionaryRef)options);
-        bool screenRecordingGranted = CGPreflightScreenCaptureAccess();
-        if (!accessibilityGranted) {
-            custom_log(OS_LOG_TYPE_ERROR, @"app-delegate",
-                       @"accessibility permissions not granted");
-        }
-        if (!screenRecordingGranted) {
-            custom_log(OS_LOG_TYPE_ERROR, @"app-delegate",
-                       @"screen recording permissions not granted");
-        }
-        if (!accessibilityGranted || !screenRecordingGranted) {
-            [NSApp terminate:nil];
-        }
-
         CGSize size = CGSizeMake(160, 100);
         CGFloat padding = 20;
         CGFloat innerPadding = 15;
@@ -31,41 +15,30 @@
                                                           padding:padding
                                                      innerPadding:innerPadding
                                                  titleTextPadding:titleTextPadding];
-        sh_controller = new shortcut_controller(windowController, @"⎋");
     }
     return self;
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification*)notification {
-    statusBarItem = [NSStatusBar.systemStatusBar statusItemWithLength:NSVariableStatusItemLength];
-    statusBarItem.button.image = [NSImage imageWithSystemSymbolName:@"star.fill"
-                                           accessibilityDescription:@"Status bar icon"];
-
     NSString* appName = NSBundle.mainBundle.infoDictionary[@"CFBundleName"];
-    NSMenu* statusBarMenu = [[NSMenu alloc] init];
-    [statusBarMenu addItemWithTitle:[NSString stringWithFormat:@"About %@", appName]
-                             action:@selector(showAboutPanel)
-                      keyEquivalent:@""];
-    [statusBarMenu addItem:[NSMenuItem separatorItem]];
-    [statusBarMenu addItemWithTitle:[NSString stringWithFormat:@"Quit %@", appName]
-                             action:@selector(terminate:)
-                      keyEquivalent:@"q"];
-    statusBarItem.menu = statusBarMenu;
+    menu = [[NSMenu alloc] init];
+    NSMenuItem* appMenu = [[NSMenuItem alloc] init];
+    appMenu.submenu = [[NSMenu alloc] init];
+    [appMenu.submenu addItemWithTitle:[NSString stringWithFormat:@"About %@", appName]
+                               action:@selector(showAboutPanel)
+                        keyEquivalent:@""];
+    [appMenu.submenu addItem:[NSMenuItem separatorItem]];
+    [appMenu.submenu addItemWithTitle:[NSString stringWithFormat:@"Quit %@", appName]
+                               action:@selector(terminate:)
+                        keyEquivalent:@"q"];
+    [menu addItem:appMenu];
+    NSApplication.sharedApplication.mainMenu = menu;
 
-    shortcut_controller::set_native_command_tab_enabled(false);
-    sh_controller->register_hotkey(@"⌘⇥", "nextWindowShortcut");
-    sh_controller->register_hotkey(@"⌘`", "nextWindowShortcutActiveApp");
-    sh_controller->register_hotkey(@"⌘", "holdShortcut");
-    sh_controller->add_global_handler();
-    sh_controller->add_modifier_event_tap();
-}
-
-- (void)applicationWillTerminate:(NSNotification*)notification {
-    sh_controller->set_native_command_tab_enabled(true);
+    [windowController showWindow];
 }
 
 - (void)showAboutPanel {
-    [NSApplication.sharedApplication orderFrontStandardAboutPanel:statusBarItem];
+    [NSApplication.sharedApplication orderFrontStandardAboutPanel:menu];
     [NSApplication.sharedApplication activateIgnoringOtherApps:true];
 }
 
