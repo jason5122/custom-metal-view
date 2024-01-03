@@ -2,8 +2,8 @@ import("//build/config/mac/templates/icon.gni")
 import("//build/config/mac/templates/macos_app_bundle.gni")
 
 macos_app_bundle("app") {
-  output_name = "MetalApp"
-  bundle_identifier = "com.jason5122.metal-app"
+  output_name = "CustomMetalView"
+  bundle_identifier = "com.jason5122.custom-metal-view"
   info_plist = "resources/Info.plist"
 
   # define `code_signing_identity` in args.gn

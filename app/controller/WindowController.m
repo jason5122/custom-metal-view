@@ -21,7 +21,7 @@
 
 - (void)showWindow {
     [self.window center];
-    [self.window setFrameAutosaveName:@"metal-app"];
+    [self.window setFrameAutosaveName:@"custom-metal-view"];
     [self.window makeKeyAndOrderFront:nil];
 }
 
