@@ -5,8 +5,8 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        NSRect rect = NSMakeRect(0, 0, 600, 500);
-        windowController = [[WindowController alloc] initWithRect:rect];
+        NSRect frameRect = NSMakeRect(0, 0, 600, 500);
+        windowController = [[WindowController alloc] initWithFrame:frameRect];
     }
     return self;
 }
@@ -32,6 +32,10 @@
 - (void)showAboutPanel {
     [NSApplication.sharedApplication orderFrontStandardAboutPanel:menu];
     [NSApplication.sharedApplication activateIgnoringOtherApps:true];
+}
+
+- (BOOL)applicationSupportsSecureRestorableState:(NSApplication*)app {
+    return true;
 }
 
 @end

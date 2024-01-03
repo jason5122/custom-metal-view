@@ -9,13 +9,23 @@ macos_app_bundle("app") {
   # define `code_signing_identity` in args.gn
 
   sources = [
-    "AppDelegate.mm",
-    "controller/WindowController.mm",
-    "main.mm",
+    "AppDelegate.m",
+    "controller/AAPLViewController.m",
+    "controller/WindowController.m",
+    "main.m",
+    "model/AAPLRenderer.mm",
+    "model/Renderer.mm",
     "util/log_util.mm",
+    "view/AAPLNSView.m",
+    "view/AAPLView.m",
+    "view/MetalLayerView.m",
   ]
 
-  frameworks = [ "Cocoa.framework" ]
+  frameworks = [
+    "Cocoa.framework",
+    "Metal.framework",
+    "QuartzCore.framework",
+  ]
 
   include_dirs = [ "//app" ]
 

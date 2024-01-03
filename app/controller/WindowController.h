@@ -2,7 +2,7 @@
 
 @interface WindowController : NSWindowController
 
-- (instancetype)initWithRect:(NSRect)rect;
+- (instancetype)initWithFrame:(NSRect)frameRect;
 
 - (void)showWindow;
 
