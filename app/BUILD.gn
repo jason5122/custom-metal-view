@@ -40,6 +40,7 @@ icon("icon") {
 }
 
 bundle_data("shaders") {
-  sources = [ "resources/shaders/AAPLShaders.metallib" ]
+  sources = [ "$root_gen_dir/shaders/shaders.metallib" ]
   outputs = [ "{{bundle_resources_dir}}/shaders/{{source_file_part}}" ]
+  public_deps = [ "//app/shaders:metal_shaders_to_metallib" ]
 }

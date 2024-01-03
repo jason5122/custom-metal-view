@@ -1,5 +1,5 @@
 #import "AAPLRenderer.h"
-#import "AAPLShaderTypes.h"
+#import "shaders/AAPLShaderTypes.h"
 #import "util/AAPLConfig.h"
 
 #if CREATE_DEPTH_BUFFER
@@ -45,7 +45,7 @@ static const MTLPixelFormat AAPLDepthPixelFormat = MTLPixelFormatDepth32Float;
 #endif
 
         {
-            NSString* libraryFile = [[NSBundle mainBundle] pathForResource:@"shaders/AAPLShaders"
+            NSString* libraryFile = [[NSBundle mainBundle] pathForResource:@"shaders/shaders"
                                                                     ofType:@"metallib"];
             id<MTLLibrary> shaderLib = [_device newLibraryWithFile:libraryFile error:nil];
             if (!shaderLib) {
