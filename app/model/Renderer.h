@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 #import <Metal/Metal.h>
-#import <simd/SIMD.h>
+#import <simd/simd.h>
 
 @interface Renderer : NSObject {
 @public

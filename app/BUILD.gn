@@ -29,9 +29,17 @@ macos_app_bundle("app") {
 
   include_dirs = [ "//app" ]
 
-  deps = [ ":icon" ]
+  deps = [
+    ":icon",
+    ":shaders",
+  ]
 }
 
 icon("icon") {
   sources = [ "resources/app.iconset" ]
+}
+
+bundle_data("shaders") {
+  sources = [ "resources/shaders/AAPLShaders.metallib" ]
+  outputs = [ "{{bundle_resources_dir}}/shaders/{{source_file_part}}" ]
 }

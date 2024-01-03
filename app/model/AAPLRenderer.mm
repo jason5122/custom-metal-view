@@ -45,8 +45,9 @@ static const MTLPixelFormat AAPLDepthPixelFormat = MTLPixelFormatDepth32Float;
 #endif
 
         {
-            id<MTLLibrary> shaderLib = [_device newLibraryWithFile:@"AAPLShaders.metallib"
-                                                             error:nil];
+            NSString* libraryFile = [[NSBundle mainBundle] pathForResource:@"shaders/AAPLShaders"
+                                                                    ofType:@"metallib"];
+            id<MTLLibrary> shaderLib = [_device newLibraryWithFile:libraryFile error:nil];
             if (!shaderLib) {
                 NSLog(@" ERROR: Couldnt create a default shader library");
                 // assert here because if the shader libary isn't loading, nothing good will happen
