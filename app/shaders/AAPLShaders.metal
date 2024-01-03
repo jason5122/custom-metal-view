@@ -7,18 +7,16 @@ using namespace metal;
 #include "AAPLShaderTypes.h"
 
 // Vertex shader outputs and per-fragment inputs
-struct RasterizerData
-{
+struct RasterizerData {
     float4 clipSpacePosition [[position]];
     float3 color;
 };
 
-vertex RasterizerData
-vertexShader(uint vertexID [[ vertex_id ]],
-             constant AAPLVertex *vertexArray [[ buffer(AAPLVertexInputIndexVertices) ]],
-             constant AAPLUniforms &uniforms  [[ buffer(AAPLVertexInputIndexUniforms) ]])
-
-{
+vertex RasterizerData vertexShader(uint vertexID [[vertex_id]],
+                                   constant AAPLVertex* vertexArray
+                                   [[buffer(AAPLVertexInputIndexVertices)]],
+                                   constant AAPLUniforms& uniforms
+                                   [[buffer(AAPLVertexInputIndexUniforms)]]) {
     RasterizerData out;
 
     float2 pixelSpacePosition = vertexArray[vertexID].position.xy;
@@ -39,9 +37,6 @@ vertexShader(uint vertexID [[ vertex_id ]],
     return out;
 }
 
-fragment float4
-fragmentShader(RasterizerData in [[stage_in]])
-{
+fragment float4 fragmentShader(RasterizerData in [[stage_in]]) {
     return float4(in.color, 1.0);
 }
-

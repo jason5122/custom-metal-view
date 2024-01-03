@@ -1,6 +1,5 @@
 #import "WindowController.h"
 #import "controller/AAPLViewController.h"
-#import "view/MetalLayerView.h"
 
 @implementation WindowController
 
@@ -13,9 +12,6 @@
                                                   styleMask:mask
                                                     backing:NSBackingStoreBuffered
                                                       defer:false];
-
-        // MetalLayerView* metalLayerView = [[MetalLayerView alloc] initWithFrame:frameRect];
-        // self.window.contentView = metalLayerView;
 
         AAPLViewController* viewController = [[AAPLViewController alloc] initWithFrame:frameRect];
         self.window.contentView = viewController.view;

@@ -2,113 +2,94 @@
 
 @implementation AAPLView
 
-- (instancetype) initWithFrame:(CGRect)frame
-{
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
-    if(self)
-    {
+    if (self) {
         [self initCommon];
     }
     return self;
 }
 
-- (instancetype) initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder*)aDecoder {
     self = [super initWithCoder:aDecoder];
-    if(self)
-    {
+    if (self) {
         [self initCommon];
     }
     return self;
 }
 
-- (void)initCommon
-{
-    _metalLayer = (CAMetalLayer*) self.layer;
+- (void)initCommon {
+    _metalLayer = (CAMetalLayer*)self.layer;
 
     self.layer.delegate = self;
 }
 
 #if ANIMATION_RENDERING
 
-- (void)stopRenderLoop
-{
+- (void)stopRenderLoop {
     // Stubbed out method.  Subclasses need to implement this method.
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [self stopRenderLoop];
 }
 
-#else // IF !ANIMATION_RENDERING
+#else  // IF !ANIMATION_RENDERING
 
 // Override methods needed to handle event-based rendering
 
-- (void)displayLayer:(CALayer *)layer
-{
+- (void)displayLayer:(CALayer*)layer {
     [self renderOnEvent];
 }
 
-- (void)drawLayer:(CALayer *)layer
-        inContext:(CGContextRef)ctx
-{
+- (void)drawLayer:(CALayer*)layer inContext:(CGContextRef)ctx {
     [self renderOnEvent];
 }
 
-- (void)drawRect:(CGRect)rect
-{
+- (void)drawRect:(CGRect)rect {
     [self renderOnEvent];
 }
 
-- (void)renderOnEvent
-{
+- (void)renderOnEvent {
 #if RENDER_ON_MAIN_THREAD
     [self render];
 #else
     // Dispatch rendering on a concurrent queue
     dispatch_queue_t globalQueue = dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0);
-    dispatch_async(globalQueue, ^(){
-        [self render];
-    });
+    dispatch_async(globalQueue, ^() { [self render]; });
 #endif
 }
 
-#endif // END !ANIMAITON_RENDERING
+#endif  // END !ANIMAITON_RENDERING
 
 #if AUTOMATICALLY_RESIZE
 
-- (void)resizeDrawable:(CGFloat)scaleFactor
-{
+- (void)resizeDrawable:(CGFloat)scaleFactor {
     CGSize newSize = self.bounds.size;
     newSize.width *= scaleFactor;
     newSize.height *= scaleFactor;
 
-    if(newSize.width <= 0 || newSize.width <= 0)
-    {
+    if (newSize.width <= 0 || newSize.width <= 0) {
         return;
     }
 
 #if RENDER_ON_MAIN_THREAD
 
-    if(newSize.width == _metalLayer.drawableSize.width &&
-       newSize.height == _metalLayer.drawableSize.height)
-    {
+    if (newSize.width == _metalLayer.drawableSize.width &&
+        newSize.height == _metalLayer.drawableSize.height) {
         return;
     }
 
     _metalLayer.drawableSize = newSize;
 
     [_delegate drawableResize:newSize];
-    
+
 #else
     // All AppKit and UIKit calls which notify of a resize are called on the main thread.  Use
     // a synchronized block to ensure that resize notifications on the delegate are atomic
-    @synchronized(_metalLayer)
-    {
-        if(newSize.width == _metalLayer.drawableSize.width &&
-           newSize.height == _metalLayer.drawableSize.height)
-        {
+    @synchronized(_metalLayer) {
+        if (newSize.width == _metalLayer.drawableSize.width &&
+            newSize.height == _metalLayer.drawableSize.height) {
             return;
         }
 
@@ -121,15 +102,13 @@
 
 #endif
 
-- (void)render
-{
+- (void)render {
 #if RENDER_ON_MAIN_THREAD
     [_delegate renderToMetalLayer:_metalLayer];
 #else
     // Must synchronize if rendering on background thread to ensure resize operations from the
     // main thread are complete before rendering which depends on the size occurs.
-    @synchronized(_metalLayer)
-    {
+    @synchronized(_metalLayer) {
         [_delegate renderToMetalLayer:_metalLayer];
     }
 #endif
